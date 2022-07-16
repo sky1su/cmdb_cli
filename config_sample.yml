@@ -1,5 +1,5 @@
-# You shuld rename this file to config.yml for use
-# This section describe possible target to connection
+# You should rename this file to config.yml for use
+# This section are describes possible targets to connections
 target:
   database:
     db_name: "db name"
