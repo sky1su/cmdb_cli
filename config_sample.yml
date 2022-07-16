@@ -1,0 +1,8 @@
+# You shuld rename this file to config.yml for use
+# This section describe possible target to connection
+target:
+  database:
+    db_name: "db name"
+    db_host: "ip address"
+    db_user: "db username"
+    db_password: "db password"
