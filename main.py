@@ -10,6 +10,7 @@ import yaml
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
 import re
+import pandas as pd
 
 
 
@@ -115,7 +116,7 @@ def merge_dict (data):
                                     hdd_sum = float(hdd1) + float(hdd2)
                                     tmp_var.append({'hdd_sum': f'{hdd_sum}'})
                                     merged_data[uniq_key].update({f'{tmp_key}':tmp_var})
-    print (json.dumps(merged_data))
+    return merged_data
 
 def get_vm_list(args):
     query_string = db_query_string(convert_fields(args.fields))
@@ -146,7 +147,12 @@ def get_vm_list(args):
                     }
                 )
         data.append({f'{row["server_id"]}':data_record})
-    print(merge_dict(data))
+    if args.format[0] == 'csv':
+        pd_obj = pd.read_json(json.dumps(merged_data), orient='index')
+        print (pd_obj.to_csv(index=False))
+    else:
+        print(json.dumps(merge_dict(data)))
+    # print (json.dumps(merged_data))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="cmdb cli")
@@ -162,6 +168,11 @@ if __name__ == '__main__':
                                help='Включить вывод дополнительной информации о ВМ',
                                nargs="*"
                                )
+    create_parser.add_argument('--format',
+                               dest='format',
+                               choices=['json','csv'],
+                               help='Управление форматом вывод отчета: json или csv',
+                               default='csv')
     create_parser.set_defaults(func=get_vm_list)
 
     args = parser.parse_args()
