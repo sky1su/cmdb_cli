@@ -11,6 +11,7 @@ import psycopg2
 import yaml
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
+import os
 
 
 def clean_ip_str(str):
