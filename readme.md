@@ -9,6 +9,4 @@
     --fields [{cpu, ram,hdd, ip,net_mask,network,os, is_name} ...] Включить вывод дополнительной информации о ВМ                   
     --format {json,csv}   Управление форматом вывод отчета: json или [csv]
 
-
-
 **main.py get_vms_list** выведет информацию по всем ВМ: host_name,vcpu,ram,ip
