@@ -11,6 +11,7 @@ import psycopg2
 import yaml
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
+import os
 
 
 def clean_ip_str(str):
@@ -20,14 +21,20 @@ def get_ip_net(ipaddr):
     net_str = ipaddress.ip_interface(clean_ip_str(ipaddr)).network
     return (str(net_str))
 
-def convert_fields(args):
+def convert_field(arg):
+    """Возвращает значение словаря по переданному ключу"""
     convert_dict = {'cpu': 'vcpu',
                     'ram': 'ram',
                     'hdd': 'hdd_size',
                     'ip': 'ip_address',
                     'net_mask': 'net_subnet',
                     'os': 'os',
+                    'network': 'network',
+                    'is_name': 'is_name'
                     }
+    return convert_dict[arg]
+
+def convert_fields(args):
     result = ['host_name', 'server_id']
     for item in args:
         if item == 'network':
@@ -38,19 +45,8 @@ def convert_fields(args):
                 result.append('hdd_number')
                 result.append('hdd_size')
             else:
-                result.append(convert_dict[item])
+                result.append(convert_field(item))
     return result
-
-def convert_field(arg):
-    convert_dict = {'cpu': 'vcpu',
-                    'ram': 'ram',
-                    'hdd': 'hdd_size',
-                    'ip': 'ip_address',
-                    'net_mask': 'net_subnet',
-                    'os': 'os',
-                    'network': 'network'
-                    }
-    return convert_dict[arg]
 
 def read_config():
     with open('config.yml') as conf_file:
@@ -158,12 +154,15 @@ if __name__ == '__main__':
                                        help='description')
 
     create_parser = subparsers.add_parser('get_vms_list', help='получить список виртуальных машин в системе')
-    create_parser.add_argument('--system', nargs='*', help='имя информационной системы')
+    create_parser.add_argument('--system', nargs='*',
+                               help='имя информационной системы',
+                               default='%')
     create_parser.add_argument('--fields',
                                dest='fields',
-                               choices=['cpu','ram','hdd','ip','net_mask','network', 'os'],
+                               choices=['cpu','ram','hdd','ip','net_mask','network','os', 'is_name'],
                                help='Включить вывод дополнительной информации о ВМ',
-                               nargs="*"
+                               nargs="*",
+                               default=['cpu', 'ram', 'ip']
                                )
     create_parser.add_argument('--format',
                                dest='format',
