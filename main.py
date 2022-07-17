@@ -3,16 +3,14 @@
 import argparse
 import ipaddress
 import json
+import re
 from contextlib import closing
 
+import pandas as pd
 import psycopg2
 import yaml
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
-import re
-import pandas as pd
-
-
 
 
 def clean_ip_str(str):
@@ -152,7 +150,6 @@ def get_vm_list(args):
         print (pd_obj.to_csv(index=False))
     else:
         print(json.dumps(merge_dict(data)))
-    # print (json.dumps(merged_data))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="cmdb cli")
