@@ -145,9 +145,7 @@ def get_vm_list(args):
                     }
                 )
         data.append({f'{row["server_id"]}':data_record})
-    print(args)
     if args.format == 'csv':
-        print("!!!!!!!")
         pd_obj = pd.read_json(json.dumps(merge_dict(data)), orient='index')
         print (pd_obj.to_csv(index=False))
     else:
