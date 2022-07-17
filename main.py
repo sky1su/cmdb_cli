@@ -9,10 +9,16 @@ import psycopg2
 import yaml
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
+import re
 
+
+
+
+def clean_ip_str(str):
+    return re.sub(r"\t","", str)
 
 def get_ip_net(ipaddr):
-    net_str = ipaddress.ip_interface(ipaddr).network
+    net_str = ipaddress.ip_interface(clean_ip_str(ipaddr)).network
     return (str(net_str))
 
 def convert_fields(args):
@@ -87,7 +93,6 @@ def merge_dict (data):
             for key in record.keys():
                 key_list.add(key)
         return (key_list)
-
     uniq_keys = get_uniq_key(data)
     merged_data = {}
     for uniq_key in uniq_keys:
@@ -103,17 +108,13 @@ def merge_dict (data):
                             for tmp_key, tmp_value in value.items():
                                 if tmp_key == 'hdd':
                                     tmp_var = merged_data[uniq_key]['hdd'] + tmp_value
-                                    hdd_sum = 0
                                     for hdd1_size in merged_data[uniq_key]['hdd']:
                                         hdd1 = list(hdd1_size.values())[0]
                                     for hdd2_size in tmp_value:
                                         hdd2 = list(hdd2_size.values())[0]
-                                        # print(hdd2_size)
                                     hdd_sum = float(hdd1) + float(hdd2)
                                     tmp_var.append({'hdd_sum': f'{hdd_sum}'})
                                     merged_data[uniq_key].update({f'{tmp_key}':tmp_var})
-                    pass
-
     print (json.dumps(merged_data))
 
 def get_vm_list(args):
@@ -146,7 +147,6 @@ def get_vm_list(args):
                 )
         data.append({f'{row["server_id"]}':data_record})
     print(merge_dict(data))
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="cmdb cli")
