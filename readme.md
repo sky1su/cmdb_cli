@@ -10,3 +10,11 @@
     --format {json,csv}   Управление форматом вывод отчета: json или [csv]
 
 **main.py get_vms_list** выведет информацию по всем ВМ: host_name,vcpu,ram,ip
+
+**Установка**
+git clone https://github.com/sky1su/cmdb_cli.git
+cd cmbd
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+chmod +x main.py
