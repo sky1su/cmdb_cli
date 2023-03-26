@@ -15,7 +15,9 @@ import os
 
 
 def clean_ip_str(str):
-    return re.sub(r"\t","", str)
+    # return re.sub(r"\t","", str)
+    result = re.search('(\d+\.\d+\.\d+\.\d+)', str)
+    return result.group(1)
 
 def get_ip_net(ipaddr):
     net_str = ipaddress.ip_interface(clean_ip_str(ipaddr)).network
@@ -82,6 +84,12 @@ def merge_dict (data):
     Если у машины несколько дисков и несколько ip адресов - для корректного подсчета дисков в данных не должно быть
     ip адресов!
     """
+    # json_data = json.dumps(data)
+    # print(json_data)
+
+    def get_uniq_json_keys(json_data):
+        pass
+
     def get_uniq_key(data):
         key_list=set()
         for record in data:
