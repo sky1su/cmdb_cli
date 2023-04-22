@@ -14,13 +14,16 @@ from psycopg2.extras import DictCursor
 import os
 
 
-def clean_ip_str(str):
+def clean_net_str(str):
     # return re.sub(r"\t","", str)
     result = re.search('(\d+\.\d+\.\d+\.\d+)', str)
+    if(result == None):
+        return "0.0.0.0"
     return result.group(1)
+    # return result
 
 def get_ip_net(ipaddr):
-    net_str = ipaddress.ip_interface(clean_ip_str(ipaddr)).network
+    net_str = ipaddress.ip_interface(ipaddr).network
     return (str(net_str))
 
 def convert_field(arg):
@@ -51,7 +54,8 @@ def convert_fields(args):
     return result
 
 def read_config():
-    with open('config.yml') as conf_file:
+    home = str(os.path.dirname(os.path.abspath(__file__)))
+    with open(f'{home}/config.yml') as conf_file:
         config = yaml.load(conf_file, Loader=yaml.FullLoader)
         return config
 
@@ -131,8 +135,8 @@ def get_vm_list(args):
                 data_record.update(
                     {
                         f'{field}': get_ip_net("/".join(
-                            (row["ip_address"],
-                             row["net_subnet"])
+                            (clean_net_str(row["ip_address"]),
+                             clean_net_str(row["net_subnet"]))
                         )
                         )
                 }
