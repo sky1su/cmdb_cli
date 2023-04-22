@@ -8,7 +8,7 @@
 ```
 **main.py get_vms_list** выведет информацию по всем ВМ: host_name,vcpu,ram,ip
 
-# Установка**
+# Установка
 ## Linux/MacOS
 ```    
 git clone https://github.com/sky1su/cmdb_cli.git
