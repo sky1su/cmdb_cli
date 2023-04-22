@@ -32,6 +32,7 @@ python3.exe -m venv venv
 .\venv\scripts\activate.ps1
 pip install -r .\requirements.txt
 copy config_sample.yml config.yml
+#edit config.yml for db cred
 python3.exe main.py get_vms_list
 
 ```
