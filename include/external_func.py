@@ -1,5 +1,9 @@
+#!/usr/bin/env python3
 import json
 import pandas as pd
+from collections import ChainMap
+from itertools import chain
+
 
 def get_uniq_key(data):
     key_list = set()
@@ -26,9 +30,21 @@ def get_uniq_key(data):
 
 dict_1 = {"CI00168848": {"host_name": "kkd-dmz-rmq02p","ip": "10.207.33.187","cpu": "2","ram": "2","hdd": [{"0:0": "50"}]}}
 dict_2 = {"CI00168848": {"host_name": "kkd-dmz-rmq02p","ip": "10.207.33.187","cpu": "2","ram": "2","hdd": [{"0:1": "75"}]}}
-m_dict = dict_1['hdd'] | dict_2['hdd']
+# m_dict = dict_1['CI00168848'.'hdd'].update(dict_2['CI00168848'.'hdd'])
+# print(m_dict)
 
-df = pd.DataFrame(data=[dict_1, dict_2])
-print(m_dict)
-print(df)
+# d3=dict(ChainMap(dict_1,dict_2))
+# print(d3)
+#
+# d4=dict(chain(dict_1.items(),dict_2.items()))
+# print(d4)
+
+tmp_1=dict_1['CI00168848']['hdd']
+tmp_2=dict_2['CI00168848']['hdd']
+result_dict=dict_1 | dict_2
+result_dict['CI00168848']['hdd']=tmp_1+tmp_2
+print(result_dict)
+#
+# df = pd.DataFrame(data=[dict_1, dict_2])
+# print(df)
 

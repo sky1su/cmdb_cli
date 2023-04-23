@@ -77,6 +77,13 @@ def db_query(query_string,is_name='%'):
             cursor.execute(query_string,(is_name,))
             return cursor.fetchall()
 
+def get_uniq_key(data):
+    key_list=set()
+    for record in data:
+        for key in record.keys():
+            key_list.add(key)
+    return (key_list)
+
 def merge_dict (data):
     """"
     функция для объединения словарей. Объединение проводится для ключей hdd, ip.
@@ -88,20 +95,10 @@ def merge_dict (data):
     Если у машины несколько дисков и несколько ip адресов - для корректного подсчета дисков в данных не должно быть
     ip адресов!
     """
-    # json_data = json.dumps(data)
-    # print(json_data)
 
-    def get_uniq_json_keys(json_data):
-        pass
-
-    def get_uniq_key(data):
-        key_list=set()
-        for record in data:
-            for key in record.keys():
-                key_list.add(key)
-        return (key_list)
     uniq_keys = get_uniq_key(data)
     merged_data = {}
+    flag_hdd=0
     for uniq_key in uniq_keys:
         count = 0
         for record in data:
@@ -114,14 +111,16 @@ def merge_dict (data):
                     for value in record.values():
                             for tmp_key, tmp_value in value.items():
                                 if tmp_key == 'hdd':
+                                    flag_hdd=1
                                     tmp_var = merged_data[uniq_key]['hdd'] + tmp_value
-                                    for hdd1_size in merged_data[uniq_key]['hdd']:
-                                        hdd1 = list(hdd1_size.values())[0]
-                                    for hdd2_size in tmp_value:
-                                        hdd2 = list(hdd2_size.values())[0]
-                                    hdd_sum = float(hdd1) + float(hdd2)
-                                    tmp_var.append({'hdd_sum': f'{hdd_sum}'})
                                     merged_data[uniq_key].update({f'{tmp_key}':tmp_var})
+        if flag_hdd == 1:
+            for record_name, record_value in merged_data.items():
+                hdd_sum=0
+                for item in record_value['hdd']:
+                    hdd_sum=int(hdd_sum)+int(list(item.values())[0])
+                merged_data[record_name]['hdd_sum'] = hdd_sum
+
     return merged_data
 
 def get_vm_list(args):
@@ -155,9 +154,10 @@ def get_vm_list(args):
         data.append({f'{row["server_id"]}':data_record})
     if args.format == 'csv':
         pd_obj = pd.read_json(json.dumps(merge_dict(data)), orient='index')
-        print (pd_obj.to_csv(index=False))
+        print(pd_obj.to_csv(index=False))
     else:
         print(json.dumps(merge_dict(data)))
+        pass
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="cmdb cli")

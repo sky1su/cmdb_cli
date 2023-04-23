@@ -1,5 +1,7 @@
 # Консольный клиент для работы с cmdb
-Использование: main.py get_vms_list [-h] [--system [SYSTEM ...]] [--fields [{cpu,ram,hdd,ip,net_mask,network,os, is_name} ...]] [--format {json,csv}]
+## Использование
+>main.py get_vms_list [-h] [--system [SYSTEM ...]] [--fields [{cpu,ram,hdd,ip,net_mask,network,os, is_name} ...]] [--format {json,csv}]
+
 для **get_vms_list** доступные опции:
 ```    -h, --help            вывод справки и выход из программы
     --system [SYSTEM ...] имя информационной системы
