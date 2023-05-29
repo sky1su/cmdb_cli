@@ -35,7 +35,8 @@ def convert_field(arg):
                     'net_mask': 'net_subnet',
                     'os': 'os',
                     'network': 'network',
-                    'is_name': 'is_name'
+                    'is_name': 'is_name',
+                    'dc': 'dc'
                     }
     return convert_dict[arg]
 
@@ -171,10 +172,10 @@ if __name__ == '__main__':
                                default='%')
     create_parser.add_argument('--fields',
                                dest='fields',
-                               choices=['cpu','ram','hdd','ip','net_mask','network','os', 'is_name'],
+                               choices=['cpu','ram','hdd','ip','net_mask','network','os', 'is_name', 'dc'],
                                help='Включить вывод дополнительной информации о ВМ',
                                nargs="*",
-                               default=['cpu', 'ram', 'ip']
+                               default=['ip']
                                )
     create_parser.add_argument('--format',
                                dest='format',
