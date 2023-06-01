@@ -14,13 +14,11 @@ from psycopg2.extras import DictCursor
 import os
 
 
-def clean_net_str(str):
-    # return re.sub(r"\t","", str)
-    result = re.search('(\d+\.\d+\.\d+\.\d+)', str)
+def clean_net_str(string_for_clean):
+    result = re.search('(\d+\.\d+\.\d+\.\d+)', string_for_clean)
     if(result == None):
         return "0.0.0.0"
     return result.group(1)
-    # return result
 
 def get_ip_net(ipaddr):
     net_str = ipaddress.ip_interface(ipaddr).network
