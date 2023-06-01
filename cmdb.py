@@ -166,23 +166,23 @@ if __name__ == '__main__':
                                        description='valid subcommands',
                                        help='description')
 
-    create_parser = subparsers.add_parser('get_vms_list', help='получить список виртуальных машин в системе')
-    create_parser.add_argument('--system', nargs='*',
-                               help='имя информационной системы',
-                               default='%')
-    create_parser.add_argument('--fields',
-                               dest='fields',
-                               choices=['cpu','ram','hdd','ip','net_mask','network','os', 'is_name', 'dc'],
-                               help='Включить вывод дополнительной информации о ВМ',
-                               nargs="*",
-                               default=['ip']
-                               )
-    create_parser.add_argument('--format',
-                               dest='format',
-                               choices=['json','csv'],
-                               help='Управление форматом вывод отчета: json или csv',
-                               default='csv')
-    create_parser.set_defaults(func=get_vm_list)
+    parser_vms = subparsers.add_parser('vms', help='получить список виртуальных машин в системе')
+    parser_vms.add_argument('--system', nargs='*',
+                            help='имя информационной системы',
+                            default='%')
+    parser_vms.add_argument('--fields',
+                            dest='fields',
+                            choices=['cpu','ram','hdd','ip','net_mask','network','os', 'is_name', 'dc'],
+                            help='Включить вывод дополнительной информации о ВМ',
+                            nargs="*",
+                            default=['ip']
+                            )
+    parser_vms.add_argument('--format',
+                            dest='format',
+                            choices=['json','csv'],
+                            help='Управление форматом вывод отчета: json или csv',
+                            default='csv')
+    parser_vms.set_defaults(func=get_vm_list)
 
     args = parser.parse_args()
 
